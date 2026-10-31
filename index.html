@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>استبيان تصميم الشعار</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#3B1D6E; --teal:#7C4DDB; --amber:#A66BEA;
+  --bg:#F6F2FC; --card:#fff; --ink:#1d2731; --mut:#5d6b78; --line:#ddd3ee; --err:#B42318;
+  --r:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Tajawal","Segoe UI",Tahoma,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;font-size:16px}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 48px}
+
+header.hero{background:linear-gradient(160deg,#2A1257,#3B1D6E 50%,#7C4DDB);color:#fff;padding:36px 16px 64px;text-align:center}
+header.hero h1{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:800}
+header.hero p{opacity:.85;margin-top:6px}
+.bar{width:70px;height:4px;background:#D9B8FF;border-radius:2px;margin:14px auto 0}
+
+form{margin-top:-40px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:16px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.card > label,.card > legend,legend{display:block;font-weight:700;font-size:1.05rem;color:var(--navy);margin-bottom:4px}
+fieldset{border:0;min-width:0}
+legend{padding:0;float:right;width:100%}
+legend + *{clear:both}
+.q{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:8px;background:var(--navy);color:#fff;font-size:.85rem;margin-inline-end:8px}
+.req{color:var(--err);margin-inline-start:4px}
+.hint{color:var(--mut);font-size:.92rem;margin:2px 0 10px}
+
+input[type=text],input[type=email],input[type=tel],input[type=number],input[type=date],select,textarea{
+  width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;font:inherit;background:#fff;color:var(--ink);margin-top:8px}
+input:focus,select:focus,textarea:focus{outline:3px solid rgba(124,77,219,.25);border-color:var(--teal)}
+input[dir=ltr]{text-align:right}
+.err{display:none;color:var(--err);font-size:.9rem;margin-top:6px}
+.card.invalid{border-color:var(--err)}
+.card.invalid .err{display:block}
+
+/* choice cards */
+.choices{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-top:10px}
+.choice{position:relative}
+.choice input{position:absolute;opacity:0;inset:0;width:100%;height:100%;cursor:pointer;margin:0}
+.choice .box{display:block;height:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;background:#fff;transition:.15s}
+.choice .box b{display:block;color:var(--navy)}
+.choice .box small{color:var(--mut);font-size:.86rem;line-height:1.5;display:block;margin-top:2px}
+.choice input:focus-visible + .box{outline:3px solid rgba(124,77,219,.35)}
+.choice input:checked + .box{border-color:var(--teal);background:#EFE8FB;box-shadow:inset 0 0 0 1px var(--teal)}
+.choice:hover .box{border-color:var(--teal)}
+.tag{display:inline-block;background:#F3EBFD;color:#5B2FA8;border:1px solid #d9c4f5;border-radius:20px;padding:0 10px;font-size:.78rem;font-weight:700;margin-top:6px}
+
+.notice{display:flex;gap:10px;align-items:flex-start;border-radius:10px;padding:10px 14px;margin-top:12px;font-size:.95rem;background:#F3EBFD;border-inline-start:5px solid #A66BEA}
+.notice.info{background:#EFE8FB;border-color:var(--teal)}
+.notice.strong{background:#FDECEA;border-color:var(--err)}
+
+.counter{display:inline-flex;align-items:center;gap:10px;margin-top:10px}
+.counter button{width:42px;height:42px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-size:1.3rem;cursor:pointer;color:var(--navy)}
+.counter button:hover{border-color:var(--teal)}
+.counter input{width:84px;text-align:center;margin:0;font-weight:700}
+
+.row{display:grid;grid-template-columns:1fr 150px;gap:10px}
+@media(max-width:520px){.row{grid-template-columns:1fr}}
+
+.check{display:flex;gap:10px;align-items:flex-start;margin-top:12px;cursor:pointer}
+.check input{margin-top:6px;width:18px;height:18px;accent-color:var(--teal)}
+
+button.primary{width:100%;border:0;border-radius:12px;padding:15px;font:inherit;font-weight:800;font-size:1.1rem;background:linear-gradient(135deg,#3B1D6E,#7C4DDB);color:#fff;cursor:pointer}
+button.primary:hover{filter:brightness(1.08)}
+button.ghost{border:1.5px solid var(--navy);background:#fff;color:var(--navy);border-radius:12px;padding:13px;font:inherit;font-weight:700;cursor:pointer}
+
+/* result */
+#done{display:none}
+#done h2{color:var(--navy);margin-bottom:6px}
+pre#summary{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:14px;margin:12px 0;font:inherit;font-size:.95rem;line-height:1.8}
+.actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.actions a,.actions button{display:block;text-align:center;text-decoration:none}
+a.btn{border-radius:12px;padding:13px;font-weight:700;color:#fff}
+a.wa{background:#1a9c5a}a.mail{background:linear-gradient(135deg,#5B2FA8,#7C4DDB)}
+.ex{display:flex;gap:8px;margin-top:10px}
+.thumb{flex:1;background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px;display:block}
+.thumb svg,.thumb img{display:block;width:100%;height:auto}
+.thumb svg{direction:ltr;unicode-bidi:isolate}
+.en{font-weight:500;color:var(--mut);font-size:.82rem;direction:ltr;unicode-bidi:isolate;margin-inline-start:4px}
+#types{grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}
+.eg{color:var(--mut);font-size:.85rem;margin-top:10px}
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-top:10px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;inset:0;width:100%;height:100%;cursor:pointer;margin:0}
+.chip span{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff;transition:.15s}
+.chip i{width:18px;height:18px;border-radius:50%;border:1px solid rgba(0,0,0,.2);flex:none}
+.chip input:focus-visible + span{outline:3px solid rgba(124,77,219,.35)}
+.chip input:checked + span{border-color:var(--teal);background:#EFE8FB;box-shadow:inset 0 0 0 1px var(--teal);font-weight:700}
+textarea{resize:vertical;min-height:84px;line-height:1.7}
+.reqnote{color:#B42318;font-size:.95rem;padding:12px 20px}
+header.hero h1{letter-spacing:2px}
+input[type=date]{text-align:right}
+#ptypeOther{margin-top:10px}
+.swatches.small{grid-template-columns:repeat(auto-fill,minmax(70px,1fr))}
+.account{padding:0;overflow:hidden;box-shadow:0 2px 8px rgba(59,29,110,.10)}
+.account > div{padding:14px 20px}
+.account > div + div{border-top:1px solid var(--line)}
+.acc-row{display:flex;align-items:center;flex-wrap:wrap;gap:10px 14px}
+.acc-email{font-weight:700;font-size:1.05rem;color:var(--ink);word-break:break-all}
+.acc-email.empty{color:var(--mut);font-weight:500}
+.acc-input{flex:1;min-width:200px;margin:0 !important;padding:8px 12px !important}
+.acc-input.bad{border-color:var(--err)}
+.acc-link{color:#1a56db;text-decoration:underline;font-weight:500;cursor:pointer}
+.acc-link:hover{color:#1240a8}
+.acc-err{color:var(--err);font-size:.9rem;padding-top:0 !important;border-top:0 !important;margin-top:-6px}
+.acc-status{display:flex;align-items:center;gap:10px;color:var(--mut)}
+.acc-cloud{color:var(--mut);line-height:0}
+.acc-req{color:#B42318;font-size:.95rem}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>LOGO</h1>
+  <p>أسئلة بسيطة لصناعة شعار يليق بك وبشركتك</p>
+  <div class="bar"></div>
+</header>
+
+<div class="wrap">
+<form id="f" novalidate>
+
+  <section class="card account" aria-label="معلومات الحساب">
+    <div class="acc-row">
+      <span id="accEmail" class="acc-email empty" dir="ltr">لم يتم تحديد بريد</span>
+      <input id="accInput" class="acc-input" type="email" dir="ltr" placeholder="name@example.com" autocomplete="email" aria-label="البريد الإلكتروني" hidden>
+      <a href="#" id="switchAcc" class="acc-link">تبديل الحساب</a>
+    </div>
+    <div class="acc-err" id="accErr" hidden>يرجى إدخال بريد إلكتروني صحيح.</div>
+    <div class="acc-status">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8"/><path d="m3 7 9 6 9-6"/><circle cx="19" cy="18" r="4" fill="currentColor" stroke="none"/><path d="m17.6 16.6 2.8 2.8m0-2.8-2.8 2.8" stroke="#fff"/></svg>
+      <span>غير مشترك</span>
+    </div>
+    <div class="acc-cloud" title="تم الحفظ">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 18 9.5a4 4 0 0 1-.5 8.5Z"/><path d="m9 13 2.2 2.2L15.5 11"/></svg>
+    </div>
+    <div class="acc-req"><span class="req">*</span> تشير إلى أنّ السؤال مطلوب</div>
+  </section>
+
+  <div class="card" data-f="name">
+    <label for="name"><span class="q">1</span>الاسم الثلاثي<span class="req">*</span></label>
+    <input id="name" name="name" type="text" placeholder="إجابتك" autocomplete="name">
+    <div class="err">يرجى كتابة الاسم الثلاثي (ثلاث كلمات على الأقل).</div>
+  </div>
+
+  <div class="card" data-f="phone">
+    <label for="phone"><span class="q">2</span>رقم Whatsapp<span class="req">*</span></label>
+    <input id="phone" name="phone" type="tel" dir="ltr" placeholder="+963 9XX XXX XXX" autocomplete="tel">
+    <div class="err">يرجى إدخال رقم واتساب صحيح.</div>
+  </div>
+
+  <div class="card" data-f="email">
+    <label for="email"><span class="q">3</span>Email<span class="req">*</span></label>
+    <input id="email" name="email" type="email" dir="ltr" placeholder="name@example.com" autocomplete="email">
+    <div class="err">يرجى إدخال بريد إلكتروني صحيح.</div>
+  </div>
+
+  <div class="card" data-f="project">
+    <label for="project"><span class="q">4</span>اسم المشروع ( انكليزي أو عربي )<span class="req">*</span></label>
+    <input id="project" name="project" type="text" placeholder="إجابتك">
+    <div class="err">يرجى كتابة اسم المشروع.</div>
+  </div>
+
+  <fieldset class="card" data-f="ptype">
+    <legend><span class="q">5</span>نوع المشروع<span class="req">*</span></legend>
+    <div class="swatches" id="ptypes"></div>
+    <input id="ptypeOther" name="ptypeOther" type="text" placeholder="أخرى: اكتب نوع مشروعك" hidden>
+    <div class="err">يرجى اختيار نوع المشروع.</div>
+  </fieldset>
+
+  <fieldset class="card" data-f="count">
+    <legend><span class="q">6</span>كم شكل للشعار<span class="req">*</span></legend>
+    <div class="swatches" id="counts"></div>
+    <div class="err">يرجى اختيار عدد الأشكال.</div>
+  </fieldset>
+
+  <fieldset class="card" data-f="scope">
+    <legend><span class="q">7</span>ماذا تريد<span class="req">*</span></legend>
+    <div class="choices" id="scopes"></div>
+    <div class="err">يرجى الاختيار.</div>
+  </fieldset>
+
+  <fieldset class="card" data-f="type">
+    <legend><span class="q">8</span>نوع الشعار؟<span class="req">*</span></legend>
+    <div class="choices" id="types"></div>
+    <p class="eg">الصور أمثلة توضيحية للفرق بين الأنواع فقط، وليست أعمالًا نهائية.</p>
+    <div class="notice"><span>⚠️</span><span><b>تنويه:</b> الشعار المرسوم هو <b>أغلى أنواع الشعارات</b>.</span></div>
+    <div class="err">يرجى اختيار نوع الشعار.</div>
+  </fieldset>
+
+  <div class="card" data-f="liked">
+    <label for="liked"><span class="q">9</span>ماهو الشعار الذي رأيته وأعجبك ؟<span class="req">*</span></label>
+    <input id="liked" name="liked" type="text" placeholder="إجابتك">
+    <div class="err">يرجى كتابة الشعار الذي أعجبك.</div>
+  </div>
+
+  <fieldset class="card" data-f="colors">
+    <legend><span class="q">10</span>ماهي الألوان المفضلة للشعار؟<span class="req">*</span></legend>
+    <p class="hint">يمكنك اختيار أكثر من لون.</p>
+    <div class="swatches" id="colors"></div>
+    <input id="colorsOther" name="colorsOther" type="text" placeholder="ألوان أخرى أو درجات محددة (اختياري)">
+    <div class="err">يرجى اختيار لون واحد على الأقل أو كتابة اللون الذي ترغب به.</div>
+  </fieldset>
+
+  <div class="card" data-f="deadline">
+    <label for="deadline"><span class="q">11</span>اخر وقت لتسليم الشعار ؟<span class="req">*</span></label>
+    <input id="deadline" name="deadline" type="date" dir="ltr">
+    <div class="notice"><span>⏱️</span><span><b>تنويه:</b> كلما كانت مدة التسليم أقصر كان السعر أغلى.</span></div>
+    <div class="err">يرجى اختيار تاريخ صحيح لا يسبق تاريخ اليوم.</div>
+  </div>
+
+  <div class="card" data-f="budget">
+    <label for="budget"><span class="q">12</span>كم تقديرك لميزانية صناعة الشعار ؟<span class="req">*</span></label>
+    <div class="row">
+      <input id="budget" name="budget" type="number" min="1" inputmode="decimal" placeholder="إجابتك">
+      <select id="currency" name="currency" aria-label="العملة"></select>
+    </div>
+    <div class="err">يرجى إدخال مبلغ صحيح.</div>
+  </div>
+
+  <fieldset class="card" data-f="payment">
+    <legend><span class="q">13</span>طريقة الدفع ؟<span class="req">*</span></legend>
+    <div class="choices" id="payments"></div>
+    <div class="err">يرجى اختيار طريقة الدفع.</div>
+  </fieldset>
+
+  <div class="card" data-f="notes">
+    <label for="notes"><span class="q">14</span>ملاحظات</label>
+    <p class="hint">أي معلومات أو طلبات إضافية تودّ إخبارنا بها (اختياري).</p>
+    <textarea id="notes" name="notes" rows="4" placeholder="اكتب ملاحظاتك هنا"></textarea>
+  </div>
+
+  <div class="card" data-f="agree">
+    <div class="notice strong" style="margin-top:0">
+      <span>📌</span>
+      <span><b>ملاحظة مهمة:</b> لن يبدأ العمل على المشروع قبل دفع <b>نصف السعر</b>.</span>
+    </div>
+    <label class="check"><input type="checkbox" id="agree"><span>قرأتُ الملاحظة أعلاه وأوافق عليها.</span></label>
+    <div class="err">يرجى الموافقة على الملاحظة للمتابعة.</div>
+  </div>
+
+  <button class="primary" type="submit">إرسال الاستبيان</button>
+</form>
+
+<!-- result screen -->
+<section id="done" class="card" aria-live="polite">
+  <h2>✅ شكرًا لك، تم تجهيز طلبك</h2>
+  <p class="hint" id="doneHint">اختر طريقة الإرسال لإيصال الإجابات إلينا:</p>
+  <pre id="summary"></pre>
+  <div class="actions">
+    <a class="btn wa" id="waBtn" target="_blank" rel="noopener">إرسال عبر واتساب</a>
+    <a class="btn mail" id="mailBtn">إرسال عبر البريد</a>
+    <button class="ghost" type="button" id="copyBtn">نسخ الإجابات</button>
+  </div>
+</section>
+</div>
+
+<script>
+/* ================= الإعدادات: عدّلها بما يناسبك ================= */
+const CONFIG = {
+  DESIGNER_EMAIL: "you@example.com",      // بريدك الذي تصلك عليه الإجابات
+  DESIGNER_WHATSAPP: "963900000000",      // رقمك بصيغة دولية بدون + أو 00
+  FORM_ENDPOINT: ""                       // اختياري: رابط خدمة مثل Formspree؛ إن تُرك فارغًا يظهر خيار واتساب/بريد
+};
+
+/* نماذج توضيحية أصلية (SVG) لكل نوع. لاستبدالها بأعمالك: أضف imgs:["img/a.jpg","img/b.jpg"] لأي نوع وسيُستخدم بدل الـ SVG */
+const S = inner => `<svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" role="img">${inner}</svg>`;
+const LOGO_TYPES = [
+  {v:"الشعار الرمزي", en:"Pictorial", d:"رمز أو أيقونة تمثّل المشروع", ex:[
+    S('<path d="M60 12C86 16 96 40 86 58C76 71 52 69 44 54C36 40 42 18 60 12Z" fill="#7C4DDB"/><path d="M60 22C63 40 60 56 52 66" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>'),
+    S('<circle cx="60" cy="34" r="16" fill="#D9B8FF"/><path d="M18 66Q60 18 102 66Z" fill="#3B1D6E"/>')]},
+  {v:"الشعار النصي", en:"Wordmark", d:"اسم المشروع مكتوبًا بخط مميّز", ex:[
+    S('<text x="60" y="50" text-anchor="middle" font-family="Georgia,serif" font-size="32" font-weight="700" font-style="italic" fill="#3B1D6E">Nova</text>'),
+    S('<text x="60" y="48" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" font-weight="800" letter-spacing="3" fill="#A66BEA">CEDAR</text>')]},
+  {v:"الشعار الحرفي", en:"Monogram", d:"حرف أو أحرف من اسم المشروع", ex:[
+    S('<circle cx="60" cy="40" r="28" fill="none" stroke="#3B1D6E" stroke-width="4"/><text x="60" y="50" text-anchor="middle" font-family="Georgia,serif" font-size="28" font-weight="700" fill="#3B1D6E">AK</text>'),
+    S('<rect x="32" y="12" width="56" height="56" rx="12" fill="#7C4DDB"/><text x="60" y="49" text-anchor="middle" font-family="Arial,sans-serif" font-size="26" font-weight="800" fill="#fff">MR</text>')]},
+  {v:"الشعار المزيج", en:"Combined", d:"جمع بين الرمز والنص", ex:[
+    S('<polygon points="8,40 17,24 35,24 44,40 35,56 17,56" fill="#7C4DDB"/><circle cx="26" cy="40" r="6" fill="#fff"/><text x="52" y="46" font-family="Arial,sans-serif" font-size="19" font-weight="700" fill="#3B1D6E">Orbit</text>'),
+    S('<circle cx="22" cy="40" r="15" fill="#A66BEA"/><path d="M22 29Q35 40 22 51Q9 40 22 29Z" fill="#fff"/><text x="44" y="46" font-family="Georgia,serif" font-size="19" font-weight="700" fill="#3B1D6E">Lumen</text>')]},
+  {v:"الشعار المرسوم", en:"Emblem", d:"رسم مخصّص يضم النص داخل شارة أو ختم", pricey:true, ex:[
+    S('<path d="M60 8L96 20V42C96 58 80 68 60 74C40 68 24 58 24 42V20Z" fill="#3B1D6E"/><path d="M60 14L90 24V42C90 54 76 62 60 68C44 62 30 54 30 42V24Z" fill="none" stroke="#D9B8FF" stroke-width="2"/><text x="60" y="43" text-anchor="middle" font-family="Georgia,serif" font-size="15" font-weight="700" fill="#fff">ROYAL</text><text x="60" y="57" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#D9B8FF">★ ★ ★</text>'),
+    S('<circle cx="60" cy="40" r="33" fill="#5B2FA8"/><circle cx="60" cy="40" r="27" fill="none" stroke="#fff" stroke-width="1.5" stroke-dasharray="3 2"/><text x="60" y="39" text-anchor="middle" font-family="Georgia,serif" font-size="14" font-weight="700" fill="#fff">BEAN</text><text x="60" y="53" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#fff">&amp; CO.</text>')]},
+  {v:"شعار الشخصية", en:"Mascot", d:"شخصية أو مجسّم يمثّل المشروع", ex:[
+    S('<path d="M30 34L36 8L53 24Z" fill="#A66BEA"/><path d="M90 34L84 8L67 24Z" fill="#A66BEA"/><ellipse cx="60" cy="44" rx="30" ry="26" fill="#D9B8FF"/><path d="M38 52Q60 76 82 52Q60 58 38 52Z" fill="#fff"/><circle cx="48" cy="42" r="3.5" fill="#1d2731"/><circle cx="72" cy="42" r="3.5" fill="#1d2731"/><ellipse cx="60" cy="52" rx="4" ry="3" fill="#1d2731"/>'),
+    S('<line x1="60" y1="10" x2="60" y2="20" stroke="#3B1D6E" stroke-width="3"/><circle cx="60" cy="9" r="4" fill="#D9B8FF"/><rect x="34" y="20" width="52" height="44" rx="12" fill="#7C4DDB"/><circle cx="48" cy="40" r="6" fill="#fff"/><circle cx="72" cy="40" r="6" fill="#fff"/><circle cx="48" cy="40" r="2.5" fill="#1d2731"/><circle cx="72" cy="40" r="2.5" fill="#1d2731"/><rect x="48" y="52" width="24" height="5" rx="2.5" fill="#fff"/>')]},
+  {v:"الشعار التجريدي", en:"Abstract", d:"أشكال تجريدية غير مباشرة", ex:[
+    S('<circle cx="47" cy="40" r="22" fill="#7C4DDB" fill-opacity=".85"/><circle cx="73" cy="40" r="22" fill="#A66BEA" fill-opacity=".85"/>'),
+    S('<path d="M24 58C34 20 60 16 70 36C80 56 98 50 98 24" stroke="#5B2FA8" stroke-width="9" fill="none" stroke-linecap="round"/>')]},
+  {v:"الشعار المتغير", en:"Dynamic", d:"شعار له أكثر من شكل بحسب الاستخدام", ex:[
+    S('<circle cx="22" cy="40" r="16" fill="#3B1D6E"/><rect x="44" y="24" width="32" height="32" rx="10" fill="#7C4DDB"/><polygon points="86,56 102,24 118,56" fill="#A66BEA"/>'),
+    S('<rect x="4" y="24" width="32" height="32" rx="16" fill="#3B1D6E"/><rect x="44" y="24" width="32" height="32" rx="8" fill="#7C4DDB"/><rect x="84" y="24" width="32" height="32" rx="2" fill="#A66BEA"/><g font-family="Arial,sans-serif" font-size="18" font-weight="800" fill="#fff" text-anchor="middle"><text x="20" y="46">d</text><text x="60" y="46">d</text><text x="100" y="46">d</text></g>')]}
+];
+const PROJECT_TYPES = ["طبي","تعليم","إعلام","غذائي","أخرى"];
+const COUNTS = ["1","2","3"];
+const SCOPES = ["شعار","هوية بصرية كاملة"];
+const CURRENCIES = ["دولار أمريكي","يورو","ليرة تركية","ليرة سورية","أخرى"];
+const PAYMENTS = ["نقدي","شام كاش","بطاقة بنكية"];
+/* ================================================================ */
+
+const $ = s => document.querySelector(s);
+const get = n => (document.querySelector(`input[name=${n}]:checked`)||{}).value || "";
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function radios(host, name, items){
+  $(host).innerHTML = items.map(it=>{
+    const o = typeof it === "string" ? {v:it} : it;
+    const thumbs = (o.imgs ? o.imgs.map(src=>`<span class="thumb"><img src="${esc(src)}" alt=""></span>`) : (o.ex||[]).map(x=>`<span class="thumb" aria-hidden="true">${x}</span>`)).join("");
+    return `<label class="choice"><input type="radio" name="${name}" value="${esc(o.v)}">
+      <span class="box"><b>${esc(o.v)}${o.en?` <span class="en">${esc(o.en)}</span>`:""}</b>${o.d?`<small>${esc(o.d)}</small>`:""}${thumbs?`<span class="ex">${thumbs}</span>`:""}${o.pricey?'<span class="tag">الأغلى سعرًا</span>':""}</span></label>`;
+  }).join("");
+}
+radios("#types","type",LOGO_TYPES);
+radios("#scopes","scope",SCOPES);
+function chipList(host,name,items){
+  $(host).innerHTML = items.map(v=>`<label class="chip"><input type="radio" name="${name}" value="${esc(v)}"><span>${esc(v)}</span></label>`).join("");
+}
+chipList("#ptypes","ptype",PROJECT_TYPES);
+chipList("#counts","count",COUNTS);
+$("#counts").classList.add("small");
+document.querySelectorAll("input[name=ptype]").forEach(r=>r.addEventListener("change",()=>{
+  const other = get("ptype")==="أخرى"; $("#ptypeOther").hidden = !other; if(other) $("#ptypeOther").focus();
+}));
+const todayISO = new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+$("#deadline").min = todayISO;
+radios("#payments","payment",PAYMENTS);
+const COLORS = [["أحمر","#D92D20"],["برتقالي","#F97316"],["أصفر","#FACC15"],["أخضر","#16A34A"],["أزرق","#2563EB"],["سماوي","#06B6D4"],["بنفسجي","#7C4DDB"],["وردي","#EC4899"],["بني","#8B5A2B"],["ذهبي","#C9A227"],["رمادي","#6B7280"],["أسود","#111827"],["أبيض","#FFFFFF"]];
+$("#colors").innerHTML = COLORS.map(([n,c])=>`<label class="chip"><input type="checkbox" name="colors" value="${n}"><span><i style="background:${c}"></i>${n}</span></label>`).join("");
+$("#currency").innerHTML = CURRENCIES.map(c=>`<option>${c}</option>`).join("");
+
+/* حاوية الحساب: عرض البريد وتبديل الحساب */
+(function(){
+  const show = $("#accEmail"), inp = $("#accInput"), err = $("#accErr"), q = $("#email");
+  const ok = v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+  const render = v => { v=(v||"").trim(); show.textContent = v || "لم يتم تحديد بريد"; show.classList.toggle("empty", !v); };
+  function close(){ inp.hidden = true; show.hidden = false; err.hidden = true; inp.classList.remove("bad"); }
+  function commit(){
+    const v = inp.value.trim();
+    if(v && !ok(v)){ inp.classList.add("bad"); err.hidden = false; inp.focus(); return; }
+    q.value = v; render(v); close();
+    try{ v ? localStorage.setItem("lf_email", v) : localStorage.removeItem("lf_email"); }catch(_){}
+    const c = q.closest("[data-f]"); if(c && c.classList.contains("invalid")) check("email");
+  }
+  $("#switchAcc").addEventListener("click", e=>{
+    e.preventDefault();
+    inp.value = "";            // تفريغ الحقل الحالي
+    show.hidden = true; inp.hidden = false; inp.focus();
+  });
+  inp.addEventListener("keydown", e=>{
+    if(e.key === "Enter"){ e.preventDefault(); commit(); }
+    if(e.key === "Escape"){ close(); }
+  });
+  inp.addEventListener("blur", ()=>{ if(!inp.hidden) commit(); });
+  q.addEventListener("input", ()=>render(q.value));
+  try{ const saved = localStorage.getItem("lf_email"); if(saved){ q.value = saved; render(saved); } }catch(_){}
+})();
+
+/* ترقيم الأسئلة تلقائيًا بحسب ترتيبها في الصفحة */
+document.querySelectorAll("#f .card[data-f]:not([data-f=agree]) .q").forEach((q,i)=>q.textContent = i+1);
+
+/* التحقق */
+const val = {
+  email:   () => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test($("#email").value.trim()),
+  name:    () => $("#name").value.trim().split(/\s+/).filter(Boolean).length >= 3,
+  phone:   () => /^\+?[\d\s\-()]{7,20}$/.test($("#phone").value.trim()) && $("#phone").value.replace(/\D/g,"").length >= 7,
+  project: () => $("#project").value.trim().length > 0,
+  count:   () => !!get('count'),
+  ptype:   () => !!get('ptype') && (get('ptype')!=='أخرى' || $('#ptypeOther').value.trim().length>0),
+  liked:   () => $('#liked').value.trim().length>0,
+  type:    () => !!document.querySelector('input[name=type]:checked'),
+  scope:   () => !!document.querySelector('input[name=scope]:checked'),
+  deadline:() => /^\d{4}-\d{2}-\d{2}$/.test($('#deadline').value) && $('#deadline').value >= todayISO,
+  budget:  () => parseFloat($("#budget").value) > 0,
+  payment: () => !!document.querySelector('input[name=payment]:checked'),
+  colors:  () => document.querySelectorAll('input[name=colors]:checked').length>0 || $('#colorsOther').value.trim().length>0,
+  agree:   () => $("#agree").checked
+};
+function check(key){
+  const ok = val[key]();
+  document.querySelector(`[data-f=${key}]`).classList.toggle("invalid", !ok);
+  return ok;
+}
+document.querySelectorAll("input,select").forEach(el=>el.addEventListener("input",()=>{
+  const c = el.closest("[data-f]"); if(c && c.classList.contains("invalid")) check(c.dataset.f);
+}));
+
+/* الإرسال */
+$("#f").addEventListener("submit", async e=>{
+  e.preventDefault();
+  let first = null;
+  Object.keys(val).forEach(k=>{ if(!check(k) && !first) first = document.querySelector(`[data-f=${k}]`); });
+  if(first){ first.scrollIntoView({behavior:"smooth",block:"center"}); return; }
+
+  const data = {
+    "الاسم الثلاثي": $("#name").value.trim(),
+    "رقم واتساب": $("#phone").value.trim(),
+    "البريد الإلكتروني": $("#email").value.trim(),
+    "اسم المشروع": $("#project").value.trim(),
+    "نوع المشروع": get("ptype")==="أخرى" ? "أخرى: "+$("#ptypeOther").value.trim() : get("ptype"),
+    "عدد أشكال الشعار": get("count"),
+    "المطلوب": get("scope"),
+    "نوع الشعار": get("type"),
+    "الشعار الذي أعجبه": $("#liked").value.trim(),
+    "الألوان المفضلة": [...document.querySelectorAll('input[name=colors]:checked')].map(c=>c.value).concat($("#colorsOther").value.trim()||[]).join("، "),
+    "آخر موعد للتسليم": $("#deadline").value.split("-").reverse().join("/"),
+    "الميزانية المقدّرة": `${$("#budget").value} ${$("#currency").value}`,
+    "طريقة الدفع": get("payment"),
+    "ملاحظات": $("#notes").value.trim() || "—",
+    "الموافقة على دفع نصف السعر قبل البدء": "نعم"
+  };
+  const text = "استبيان تصميم شعار\n\n" + Object.entries(data).map(([k,v])=>`• ${k}: ${v}`).join("\n");
+
+  if(CONFIG.FORM_ENDPOINT){
+    try{
+      const r = await fetch(CONFIG.FORM_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(data)});
+      if(!r.ok) throw 0;
+      showDone(text,true); return;
+    }catch(_){ /* عند الفشل نعرض الخيارات اليدوية */ }
+  }
+  showDone(text,false);
+});
+
+function showDone(text, sent){
+  $("#f").style.display = "none";
+  $("#done").style.display = "block";
+  $("#summary").textContent = text;
+  if(sent){
+    $("#doneHint").textContent = "تم إرسال إجاباتك بنجاح، وسنتواصل معك قريبًا.";
+    document.querySelector(".actions").style.display = "none";
+  }else{
+    $("#waBtn").href = `https://wa.me/${CONFIG.DESIGNER_WHATSAPP}?text=${encodeURIComponent(text)}`;
+    $("#mailBtn").href = `mailto:${CONFIG.DESIGNER_EMAIL}?subject=${encodeURIComponent("استبيان تصميم شعار")}&body=${encodeURIComponent(text)}`;
+  }
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+$("#copyBtn").addEventListener("click", async ()=>{
+  try{ await navigator.clipboard.writeText($("#summary").textContent); $("#copyBtn").textContent="تم النسخ ✓"; }
+  catch(_){ const r=document.createRange(); r.selectNodeContents($("#summary")); const s=getSelection(); s.removeAllRanges(); s.addRange(r); }
+});
+</script>
+</body>
+</html>
